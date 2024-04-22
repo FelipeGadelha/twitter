@@ -1,0 +1,38 @@
+server:
+  port: 8080
+  servlet:
+    context-path: /api/twitter
+  error:
+    include-message: always
+spring:
+  application:
+    name: twitter
+  datasource:
+    name: TwitterDataSource
+    driver-class-name: org.postgresql.Driver
+    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5432/twitter-kt-db}
+    username: ${SPRING_DATASOURCE_USERNAME:postgres}
+    password: ${SPRING_DATASOURCE_PASSWORD:password}
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    properties:
+      hibernate:
+        format_sql: true
+    show-sql: true
+logging:
+  level:
+    org:
+      springframework: INFO
+rsa:
+  public-key: classpath:certs/public-key.pem
+  private-key: classpath:certs/private-key.pem # ultra-sensitive data
+
+#  generate private key
+#  openssl genpkey -algorithm RSA -out private-key.pem
+
+#  generate public key
+#  openssl rsa -pubout -in private-key.pem -out public-key.pem
+
+#  Then convert it to the appropriate PCKS format and replace the old one
+#  openssl pkcs8 -topk8 -inform PEM -outform PEM -in private-key.pem -out private-key.pem -nocrypt
